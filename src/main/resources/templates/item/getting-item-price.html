@@ -19,7 +19,7 @@
             <input type="text" name="name" id="name">
         </div>
         <div style="margin-bottom: 5px">
-            <button type="button" onclick="gettingItemPrice()">가격 조회</button>
+            <button type="button" onclick="getItemPrice()">가격 조회</button>
         </div>
         <div style="margin-bottom: 5px">
             <div name="price" id="price"></div>
@@ -28,21 +28,27 @@
 </div>
 </body>
 <script>
-    function gettingItemPrice() {
+    function getItemPrice() {
         let gettingItemPriceForm = document.querySelector("#getting-item-price-form");
         let queryString = new URLSearchParams(new FormData(gettingItemPriceForm)).toString();
         let gettingItemPriceRequestUrl = "/api/items?" + queryString;
-        get(gettingItemPriceRequestUrl, queryString);
+        getRequest(gettingItemPriceRequestUrl, updatePrice);
     }
 
-    function get(requestUrl, callbackForResponse) {
+    function getRequest(requestUrl, callbackForResponse) {
         fetch(requestUrl, {
             method: 'get',
-        }).then((response) => {
-            console.log(JSON.stringify(response));
+        }).then((response) =>
+            response.json()
+        ).then((data) => {
+            callbackForResponse(data.price);
         }).catch((error) => {
             alert(error);
         });
+    }
+
+    let updatePrice = function (price) {
+        document.querySelector("#price").innerHTML = price;
     }
 </script>
 </html>
