@@ -1,0 +1,4 @@
+fruit:
+  uri: http://fruit.api.postype.net
+vegetable:
+  uri: http://vegetable.api.postype.net
