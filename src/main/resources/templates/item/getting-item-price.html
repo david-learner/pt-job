@@ -23,31 +23,44 @@
         </div>
         <div style="margin-bottom: 5px">
             <div name="price" id="price"></div>
+            <div name="message" id="message"></div>
         </div>
     </form>
 </div>
 </body>
 <script>
     function getItemPrice() {
+        clearOutput();
         let gettingItemPriceForm = document.querySelector("#getting-item-price-form");
         let queryString = new URLSearchParams(new FormData(gettingItemPriceForm)).toString();
         let gettingItemPriceRequestUrl = "/api/items?" + queryString;
         getRequest(gettingItemPriceRequestUrl, updatePrice);
     }
 
-    function getRequest(requestUrl, callbackForResponse) {
+    function getRequest(requestUrl) {
         fetch(requestUrl, {
             method: 'get',
-        }).then((response) =>
-            response.json()
-        ).then((data) => {
-            callbackForResponse(data.price);
+        }).then((response) => {
+            if (response.ok) {
+                response.json().then(data => updatePrice(data.body.price));
+                return;
+            }
+            response.json().then(data => updateMessage(data.message));
         }).catch((error) => {
             alert(error);
         });
     }
 
-    let updatePrice = function (price) {
+    function clearOutput() {
+        updatePrice("");
+        updateMessage("");
+    }
+
+    function updateMessage(message) {
+        document.querySelector("#message").innerHTML = message;
+    }
+
+    function updatePrice(price) {
         document.querySelector("#price").innerHTML = price;
     }
 </script>
