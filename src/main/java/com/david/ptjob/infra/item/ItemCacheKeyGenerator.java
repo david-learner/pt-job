@@ -2,9 +2,11 @@ package com.david.ptjob.infra.item;
 
 import com.david.ptjob.item.service.dto.GettingItemRequest;
 import org.springframework.cache.interceptor.KeyGenerator;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 
+@Component
 public class ItemCacheKeyGenerator implements KeyGenerator {
 
     private static final String SEPARATOR = "_";

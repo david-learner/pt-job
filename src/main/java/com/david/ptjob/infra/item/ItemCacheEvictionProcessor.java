@@ -6,12 +6,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.Cache;
 import org.springframework.cache.concurrent.ConcurrentMapCache;
+import org.springframework.stereotype.Component;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
 
+@Component
 @RequiredArgsConstructor
 @Slf4j
 public class ItemCacheEvictionProcessor {
