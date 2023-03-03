@@ -2,11 +2,15 @@ package com.david.ptjob.item.service.dto;
 
 import com.david.ptjob.item.domain.Category;
 import com.david.ptjob.item.validation.CategoryType;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class GettingItemRequest {
 
     @CategoryType(anyOf = {Category.FRUIT, Category.VEGETABLE})

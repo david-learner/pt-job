@@ -12,7 +12,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
@@ -23,12 +26,14 @@ public class FruitClient implements ItemClient {
     private final RestTemplate restTemplate;
     private final FruitProperties fruitProperties;
 
+    @Retryable(value = {HttpServerErrorException.class}, backoff = @Backoff(2000))
     @Override
     public Item findItemByName(String name) {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, getAccessToken());
         HttpEntity findFruitRequest = new HttpEntity(headers);
         String url = fruitProperties.getUri() + "/product?name=" + name;
+
         ResponseEntity<ItemResponse> response = restTemplate.exchange(url, HttpMethod.GET, findFruitRequest, ItemResponse.class);
         log.debug("과일 정보 응답: '{}'", response.getBody().toString());
 

@@ -10,7 +10,10 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
@@ -25,12 +28,14 @@ public class VegetableClient implements ItemClient {
     private final RestTemplate restTemplate;
     private final VegetableProperties vegetableProperties;
 
+    @Retryable(value = {HttpServerErrorException.class}, backoff = @Backoff(2000))
     @Override
     public Item findItemByName(String name) {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.AUTHORIZATION, getAccessToken());
         HttpEntity findVegetableRequest = new HttpEntity(headers);
-        String url = vegetableProperties.getUri() + "/item?name=" + name;
+        String url = createUrl("/item?name=" + name);
+
         ResponseEntity<ItemResponse> response = restTemplate.exchange(url, HttpMethod.GET, findVegetableRequest, ItemResponse.class);
         log.debug("채소 정보 응답: '{}'", response.getBody().toString());
         return response.getBody().toItem(Category.VEGETABLE);
@@ -38,9 +43,17 @@ public class VegetableClient implements ItemClient {
 
     @Override
     public String getAccessToken() {
-        String url = vegetableProperties.getUri() + "/token";
+        String url = createUrl("/token");
         ResponseEntity<String> response = restTemplate.getForEntity(url, String.class);
         List<String> cookies = response.getHeaders().get(HttpHeaders.SET_COOKIE);
+        return extractAccessTokenFromCookie(cookies);
+    }
+
+    private String createUrl(String pathAndParameters) {
+        return vegetableProperties.getUri() + pathAndParameters;
+    }
+
+    private String extractAccessTokenFromCookie(List<String> cookies) {
         String authorizationCookie = cookies.stream()
                 .filter(cookie -> cookie.contains(HttpHeaders.AUTHORIZATION))
                 .findAny()
