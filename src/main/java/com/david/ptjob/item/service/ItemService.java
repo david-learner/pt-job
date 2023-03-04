@@ -9,9 +9,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class ItemService {
 
@@ -21,7 +23,6 @@ public class ItemService {
     public GettingItemResponse findItem(GettingItemRequest request) {
         ItemClient itemClient = itemClients.findClient(request.getCategory());
         Item item = itemClient.findItemByName(request.getName());
-        // todo DB 확인
-        return GettingItemResponse.of(item.getCategory(), item.getName(), item.getPrice(), item.getCreatedAt());
+        return GettingItemResponse.from(item);
     }
 }

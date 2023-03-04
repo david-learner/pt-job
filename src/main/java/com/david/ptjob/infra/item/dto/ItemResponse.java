@@ -13,6 +13,6 @@ public class ItemResponse {
     private Integer price;
 
     public Item toItem(Category category) {
-        return Item.of(LocalDateTime.now(), category, name, price);
+        return Item.of(null, LocalDateTime.now(), category, name, price, false);
     }
 }

@@ -42,7 +42,10 @@
             method: 'get',
         }).then((response) => {
             if (response.ok) {
-                response.json().then(data => updatePrice(data.body.price));
+                response.json().then(data => {
+                    updatePrice(data.body.price);
+                    updateMessage(data.body.message);
+                });
                 return;
             }
             response.json().then(data => updateMessage(data.message));
