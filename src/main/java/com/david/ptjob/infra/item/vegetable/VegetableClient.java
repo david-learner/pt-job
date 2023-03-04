@@ -4,6 +4,7 @@ import com.david.ptjob.infra.item.ItemClient;
 import com.david.ptjob.infra.item.dto.ItemResponse;
 import com.david.ptjob.item.domain.Category;
 import com.david.ptjob.item.domain.Item;
+import com.david.ptjob.item.repository.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -11,11 +12,13 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Recover;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 
 @Component
@@ -27,6 +30,7 @@ public class VegetableClient implements ItemClient {
     private static final String WHITE_SPACE = " ";
     private final RestTemplate restTemplate;
     private final VegetableProperties vegetableProperties;
+    private final ItemRepository itemRepository;
 
     @Retryable(value = {HttpServerErrorException.class}, backoff = @Backoff(2000))
     @Override
@@ -39,6 +43,14 @@ public class VegetableClient implements ItemClient {
         ResponseEntity<ItemResponse> response = restTemplate.exchange(url, HttpMethod.GET, findVegetableRequest, ItemResponse.class);
         log.debug("채소 정보 응답: '{}'", response.getBody().toString());
         return response.getBody().toItem(Category.VEGETABLE);
+    }
+
+    @Recover
+    public Item recoverFindingItemByName(String name) {
+        return itemRepository.findItemByCategoryAndName(Category.VEGETABLE, name)
+                .orElseThrow(() -> {
+                    throw new EntityNotFoundException("청과물 가격을 제공할 수 없습니다. 잠시 후 다시 시도해 주세요.");
+                });
     }
 
     @Override

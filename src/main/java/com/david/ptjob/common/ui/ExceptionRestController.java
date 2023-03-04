@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import javax.persistence.EntityNotFoundException;
+
 @RestControllerAdvice
 @Slf4j
 public class ExceptionRestController extends ResponseEntityExceptionHandler {
@@ -27,5 +29,11 @@ public class ExceptionRestController extends ResponseEntityExceptionHandler {
         log.error("잘못된 입력 오류 발생", ex);
         String message = ex.getMessage();
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error(message));
+    }
+
+    @ExceptionHandler(EntityNotFoundException.class)
+    private ResponseEntity<ApiResponse> handleEntityNotFoundException(EntityNotFoundException ex) {
+        log.error("청과물 정보 조회 불가 오류 발생", ex);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ApiResponse.error(ex.getMessage()));
     }
 }
