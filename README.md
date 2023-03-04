@@ -1,6 +1,10 @@
 # 청과물 가격 조회 서비스
 청과물 API 중계 서버를 구현한다.
 
+## 실행방법(intellij 기준)
+- PtJobApplication 클래스의 메인 메서드를 실행합니다.
+- http://localhost:8080/getting-item-price-form 가격 조회 화면에서 가격을 조회할 수 있습니다.
+
 ## 개발환경
 - spring boot 2.7.9
 - jdk 11
