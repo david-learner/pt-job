@@ -2,6 +2,7 @@ package com.david.ptjob.item.service.dto;
 
 import com.david.ptjob.item.domain.Category;
 import com.david.ptjob.item.validation.CategoryType;
+import com.david.ptjob.item.validation.ItemName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,5 +18,6 @@ public class GettingItemRequest {
     private Category category;
 
     @NotBlank(message = "청과물 이름을 입력해야 합니다.")
+    @ItemName
     private String name;
 }
