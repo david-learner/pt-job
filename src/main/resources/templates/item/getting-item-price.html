@@ -43,7 +43,7 @@
         }).then((response) => {
             if (response.ok) {
                 response.json().then(data => {
-                    updatePrice(data.body.price);
+                    updatePrice(data.body.price + "원");
                     updateMessage(data.body.message);
                 });
                 return;
