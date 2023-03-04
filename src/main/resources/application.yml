@@ -4,4 +4,28 @@ vegetable:
   uri: http://vegetable.api.postype.net
 
 item:
-  cache-expiration-time: 10000
+  expiration-time: 10000
+
+spring:
+  datasource:
+    url: jdbc:h2:mem:item-price
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  h2:
+    console:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        format_sql: true
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+
+logging:
+  level:
+    root: debug

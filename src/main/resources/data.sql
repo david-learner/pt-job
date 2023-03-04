@@ -1,0 +1,1 @@
+insert into item (CATEGORY, CREATED_AT, NAME, PRICE) VALUES ('FRUIT', '2023-03-04 09:01:02', '토마토', 1200);
