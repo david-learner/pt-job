@@ -4,7 +4,7 @@ vegetable:
   uri: http://vegetable.api.postype.net
 
 item:
-  expiration-time: 10000
+  expiration-time: 300000
 
 spring:
   datasource:

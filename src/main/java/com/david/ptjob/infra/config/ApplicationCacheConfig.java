@@ -20,7 +20,7 @@ import java.util.Arrays;
 @Slf4j
 public class ApplicationCacheConfig {
 
-    private static final long THIRTY_SECONDS = Timer.ONE_SECOND * 30;
+    private static final long ONE_MINUTE = Timer.ONE_MINUTE * 2;
     private static final String ITEM_CACHE_NAME = "item";
 
     @Bean
@@ -30,7 +30,7 @@ public class ApplicationCacheConfig {
         return cacheManager;
     }
 
-    @Scheduled(fixedRate = THIRTY_SECONDS)
+    @Scheduled(fixedRate = ONE_MINUTE)
     public void evictExpiredCache() {
         ItemCacheEvictionProcessor.evictExpiredCache(cacheManager().getCache(ITEM_CACHE_NAME));
     }
