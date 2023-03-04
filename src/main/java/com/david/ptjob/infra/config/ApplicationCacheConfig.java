@@ -17,7 +17,6 @@ import java.util.Arrays;
 @Configuration
 @EnableCaching
 @EnableScheduling
-@Slf4j
 public class ApplicationCacheConfig {
 
     private static final long ONE_MINUTE = Timer.ONE_MINUTE * 2;

@@ -19,8 +19,8 @@ public class RestTemplateConfig {
     public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
         return restTemplateBuilder
                 .errorHandler(restTemplateErrorHandler)
-                .setConnectTimeout(Duration.ofMillis(5000)) // connection-timeout
-                .setReadTimeout(Duration.ofMillis(5000)) // read-timeout
+                .setConnectTimeout(Duration.ofMillis(5000))
+                .setReadTimeout(Duration.ofMillis(5000))
                 .build();
     }
 }

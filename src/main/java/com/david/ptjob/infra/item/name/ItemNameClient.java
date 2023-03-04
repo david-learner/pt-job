@@ -6,7 +6,6 @@ import com.david.ptjob.infra.item.vegetable.VegetableClient;
 import com.david.ptjob.infra.item.vegetable.VegetableProperties;
 import com.david.ptjob.item.domain.ItemNameCache;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -20,7 +19,6 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-@Slf4j
 public class ItemNameClient {
 
     private final FruitClient fruitClient;
